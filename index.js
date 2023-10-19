@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
-
+app.use(cors());
+app.use(express.json());
 require("dotenv").config();
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -70,7 +71,7 @@ async function run() {
           rating: upProduct.rating,
         },
       };
-      const result = await productCollection.UpdateOne(
+      const result = await productCollection.updateOne(
         filter,
         Product,
         options
@@ -89,6 +90,8 @@ async function run() {
   }
 }
 run().catch(console.dir);
+app.get("/", (req, res) => {
+  res.send("Coffie");
+});
 
-app.use(cors());
-app.use(express.json());
+app.listen(port, () => {});
